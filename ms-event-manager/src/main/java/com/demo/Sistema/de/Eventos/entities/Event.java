@@ -1,7 +1,6 @@
 package com.demo.Sistema.de.Eventos.entities;
 
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import java.time.LocalDateTime;
 
@@ -15,7 +14,7 @@ public class Event {
     private String cep;
     private String logradouro;
     private String bairro;
-    private String cidade;
+    private String localidade;
     private String uf;
     private boolean deleted;
 
@@ -67,12 +66,12 @@ public class Event {
         this.bairro = bairro;
     }
 
-    public String getCidade() {
-        return cidade;
+    public String getLocalidade() {
+        return localidade;
     }
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
+    public void setLocalidade(String localidade) {
+        this.localidade = localidade;
     }
 
     public String getUf() {
@@ -93,4 +92,5 @@ public class Event {
 
     public Event() {
     }
+
 }

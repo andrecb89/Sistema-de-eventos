@@ -1,37 +1,39 @@
 package com.demo.Sistema.de.Eventos.service;
 
+import com.demo.Sistema.de.Eventos.client.ViacepClient;
+import com.demo.Sistema.de.Eventos.controller.dto.CepDTO;
 import com.demo.Sistema.de.Eventos.entities.Event;
 import com.demo.Sistema.de.Eventos.repository.EventRepository;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EventService {
 
     public EventRepository eventRepository;
+    public ViacepClient viacepClient;
 
-    public EventService(EventRepository eventRepository) {
+    public EventService(EventRepository eventRepository, ViacepClient viacepClient) {
         this.eventRepository = eventRepository;
+        this.viacepClient = viacepClient;
     }
 
-    public List<Event> findAll() {
-        return eventRepository.findAll();
+    public List<Event> findAllEvents() {
+        return eventRepository.findByDeletedFalse();
     }
 
-    public List<Event> findAllSorted(){ return eventRepository.findAllByOrderByEventNameAsc();}
 
-    public Event findById(String id) {
-        return eventRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Post not found")
+    public List<Event> findAllEventsSorted(){ return eventRepository.findByDeletedFalseOrderByEventNameAsc();}
+
+    public Event findEventById(String id) {
+        return eventRepository.findByIdAndDeletedFalse(id).orElseThrow(
+                () -> new RuntimeException("Evento não encontrado")
         );
     }
 
-    public Event update(Event event) {
-        Event existingEvent = findById(event.getId());
+    public Event updateEvent(Event event) {
+        Event existingEvent = findEventById(event.getId());
 
         existingEvent.setId(event.getId());
         existingEvent.setEventName(event.getEventName());
@@ -39,7 +41,7 @@ public class EventService {
         existingEvent.setCep(event.getCep());
         existingEvent.setLogradouro(event.getLogradouro());
         existingEvent.setBairro(event.getBairro());
-        existingEvent.setCidade(event.getCidade());
+        existingEvent.setLocalidade(event.getLocalidade());
         existingEvent.setUf(event.getUf());
         existingEvent.setDeleted(event.isDeleted());
 
@@ -47,13 +49,26 @@ public class EventService {
         return eventRepository.save(existingEvent);
     }
 
-    public Event save(Event event){
+    public Event saveEvent(Event event){
+
+        CepDTO infoAdress = viacepClient.getInfoCep(event.getCep());
+        event.setLogradouro(infoAdress.getLogradouro());
+        event.setBairro(infoAdress.getBairro());
+        event.setLocalidade(infoAdress.getLocalidade());
+        event.setUf(infoAdress.getUf());
         return eventRepository.save(event);
     }
 
 
-    public void softDelete(String id) {
-        Optional<Event> event = eventRepository.findById(id);
-        eventRepository.delete(event.get());
+//    public void softDelete(String id) {
+//        Optional<Event> event = eventRepository.findById(id);
+//        eventRepository.delete(event.get());
+//    }
+
+    public void softDeleteEvent(String id) {
+        Event event = eventRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
+        event.setDeleted(true);
+        eventRepository.save(event);
     }
 }

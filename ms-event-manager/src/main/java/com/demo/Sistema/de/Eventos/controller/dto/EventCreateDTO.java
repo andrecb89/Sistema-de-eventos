@@ -2,8 +2,6 @@ package com.demo.Sistema.de.Eventos.controller.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class EventCreateDTO {
@@ -42,9 +40,4 @@ public class EventCreateDTO {
     public EventCreateDTO() {
     }
 
-    public EventCreateDTO(String eventName, LocalDateTime dateTime, String cep) {
-        this.eventName = eventName;
-        this.dateTime = dateTime;
-        this.cep = cep;
-    }
 }

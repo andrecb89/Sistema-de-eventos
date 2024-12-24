@@ -1,6 +1,7 @@
 package com.demo.Sistema.de.Eventos.controller;
 
 import com.demo.Sistema.de.Eventos.controller.dto.EventCreateDTO;
+import com.demo.Sistema.de.Eventos.controller.dto.EventResponseDTO;
 import com.demo.Sistema.de.Eventos.entities.Event;
 import com.demo.Sistema.de.Eventos.service.EventService;
 import jakarta.validation.Valid;
@@ -27,28 +28,30 @@ public class EventController {
 
     @GetMapping("/get-all-events")
     public ResponseEntity<List<Event>> getAllEvents() {
-        List<Event> event = eventService.findAll();
+        List<Event> event = eventService.findAllEvents();
         return ResponseEntity.ok().body(event);
     }
 
     @GetMapping("/get-all-events/sorted")
     public ResponseEntity<List<Event>> getAllEventsSorted() {
-        List<Event> event = eventService.findAllSorted();
+        List<Event> event = eventService.findAllEventsSorted();
         return ResponseEntity.ok().body(event);
     }
 
     @GetMapping("/get-event/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable String id) {
-        Event post = eventService.findById(id);
+        Event post = eventService.findEventById(id);
         return ResponseEntity.ok(post);
     }
 
     @PostMapping("/create-event")
-    public ResponseEntity<Event> createEvent(@RequestBody @Valid EventCreateDTO eventCreateDto) throws InvocationTargetException, IllegalAccessException {
+    public ResponseEntity<EventResponseDTO> createEvent(@RequestBody @Valid EventCreateDTO eventCreateDTO) throws InvocationTargetException, IllegalAccessException {
         var event = new Event();
-        BeanUtils.copyProperties(event, eventCreateDto);
-        event = eventService.save(event);
-        return ResponseEntity.status(HttpStatus.CREATED).body(event);
+        BeanUtils.copyProperties(event, eventCreateDTO);
+        event = eventService.saveEvent(event);
+        EventResponseDTO eventResponseDTO = new EventResponseDTO();
+        BeanUtils.copyProperties(eventResponseDTO, event);
+        return ResponseEntity.status(HttpStatus.CREATED).body(eventResponseDTO);
     }
 
     @PutMapping("/update-event/{id}")
@@ -58,13 +61,13 @@ public class EventController {
         Event eventToUpdate = new Event();
         BeanUtils.copyProperties(eventToUpdate, postCreateDto);
         eventToUpdate.setId(id);
-        Event updatedEvent = eventService.update(eventToUpdate);
+        Event updatedEvent = eventService.updateEvent(eventToUpdate);
         return ResponseEntity.status(HttpStatus.OK).body(updatedEvent);
     }
 
     @DeleteMapping("/cancel-ticket/{id}")
     public ResponseEntity<?> deleteEventById(@PathVariable String id) {
-        eventService.softDelete(id);
+        eventService.softDeleteEvent(id);
         return ResponseEntity.ok("Deleted successfully");
     }
 
