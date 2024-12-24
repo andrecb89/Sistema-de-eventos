@@ -2,25 +2,32 @@ package com.demo.Sistema.de.Eventos.entities;
 
 
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import java.time.LocalDateTime;
 
-import java.time.LocalDate;
 
 public class Event {
 
-    private ObjectId id;
+    @Id
+    private String id;
     private String eventName;
-    private LocalDate dateTime;
+    private LocalDateTime dateTime;
     private String cep;
     private String logradouro;
     private String bairro;
     private String cidade;
     private String uf;
+    private boolean deleted;
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-   public String getEventName() {
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getEventName() {
         return eventName;
     }
 
@@ -28,11 +35,11 @@ public class Event {
         this.eventName = eventName;
     }
 
-    public LocalDate getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDate dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -74,6 +81,14 @@ public class Event {
 
     public void setUf(String uf) {
         this.uf = uf;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public Event() {
