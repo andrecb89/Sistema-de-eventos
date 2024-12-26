@@ -14,7 +14,7 @@ public interface EventRepository extends MongoRepository<Event, String> {
 
     List<Event> findByDeletedFalse();
 
-    Optional<Event> findByIdAndDeletedFalse(String id);
+    Optional<Event> findByEventIdAndDeletedFalse(String id);
 
     List<Event> findByDeletedFalseOrderByEventNameAsc();
 

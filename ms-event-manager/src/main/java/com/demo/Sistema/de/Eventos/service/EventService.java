@@ -27,22 +27,23 @@ public class EventService {
     public List<Event> findAllEventsSorted(){ return eventRepository.findByDeletedFalseOrderByEventNameAsc();}
 
     public Event findEventById(String id) {
-        return eventRepository.findByIdAndDeletedFalse(id).orElseThrow(
+        return eventRepository.findByEventIdAndDeletedFalse(id).orElseThrow(
                 () -> new RuntimeException("Evento não encontrado")
         );
     }
 
     public Event updateEvent(Event event) {
-        Event existingEvent = findEventById(event.getId());
+        Event existingEvent = findEventById(event.getEventId());
 
-        existingEvent.setId(event.getId());
+        existingEvent.setEventId(event.getEventId());
         existingEvent.setEventName(event.getEventName());
         existingEvent.setDateTime(event.getDateTime());
         existingEvent.setCep(event.getCep());
-        existingEvent.setLogradouro(event.getLogradouro());
-        existingEvent.setBairro(event.getBairro());
-        existingEvent.setLocalidade(event.getLocalidade());
-        existingEvent.setUf(event.getUf());
+        CepDTO infoAdress = viacepClient.getInfoCep(event.getCep());
+        existingEvent.setLogradouro(infoAdress.getLogradouro());
+        existingEvent.setBairro(infoAdress.getBairro());
+        existingEvent.setLocalidade(infoAdress.getLocalidade());
+        existingEvent.setUf(infoAdress.getUf());
         existingEvent.setDeleted(event.isDeleted());
 
 
@@ -59,14 +60,8 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-
-//    public void softDelete(String id) {
-//        Optional<Event> event = eventRepository.findById(id);
-//        eventRepository.delete(event.get());
-//    }
-
     public void softDeleteEvent(String id) {
-        Event event = eventRepository.findByIdAndDeletedFalse(id)
+        Event event = eventRepository.findByEventIdAndDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
         event.setDeleted(true);
         eventRepository.save(event);

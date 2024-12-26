@@ -1,22 +1,18 @@
-package com.demo.Sistema.de.Eventos.entities;
+package com.demo.Sistema.de.Eventos.controller.dto;
 
-
-import org.springframework.data.annotation.Id;
 import java.time.LocalDateTime;
 
+public class EventDTO {
 
-public class Event {
 
-    @Id
     private String eventId;
     private String eventName;
-    private LocalDateTime dateTime;
+    private LocalDateTime eventDateTime;
     private String cep;
     private String logradouro;
     private String bairro;
     private String localidade;
     private String uf;
-    private boolean deleted;
 
     public String getEventId() {
         return eventId;
@@ -34,12 +30,12 @@ public class Event {
         this.eventName = eventName;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getEventDateTime() {
+        return eventDateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setEventDateTime(LocalDateTime eventDateTime) {
+        this.eventDateTime = eventDateTime;
     }
 
     public String getCep() {
@@ -81,16 +77,4 @@ public class Event {
     public void setUf(String uf) {
         this.uf = uf;
     }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    public Event() {
-    }
-
 }

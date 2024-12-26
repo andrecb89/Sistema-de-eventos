@@ -6,8 +6,6 @@ import com.demo.Sistema.de.Eventos.entities.Event;
 import com.demo.Sistema.de.Eventos.service.EventService;
 import jakarta.validation.Valid;
 import org.apache.commons.beanutils.BeanUtils;
-import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +38,8 @@ public class EventController {
 
     @GetMapping("/get-event/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable String id) {
-        Event post = eventService.findEventById(id);
-        return ResponseEntity.ok(post);
+        Event event = eventService.findEventById(id);
+        return ResponseEntity.ok(event);
     }
 
     @PostMapping("/create-event")
@@ -60,7 +58,7 @@ public class EventController {
 
         Event eventToUpdate = new Event();
         BeanUtils.copyProperties(eventToUpdate, postCreateDto);
-        eventToUpdate.setId(id);
+        eventToUpdate.setEventId(id);
         Event updatedEvent = eventService.updateEvent(eventToUpdate);
         return ResponseEntity.status(HttpStatus.OK).body(updatedEvent);
     }
