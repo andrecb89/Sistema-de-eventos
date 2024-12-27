@@ -17,7 +17,6 @@ public class Event {
     private String bairro;
     private String localidade;
     private String uf;
-    private boolean deleted;
 
     public String getEventId() {
         return eventId;
@@ -83,15 +82,5 @@ public class Event {
         this.uf = uf;
     }
 
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    public Event() {
-    }
 
 }

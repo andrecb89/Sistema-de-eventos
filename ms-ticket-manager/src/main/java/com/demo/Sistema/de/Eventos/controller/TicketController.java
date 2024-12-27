@@ -23,30 +23,34 @@ public class TicketController {
 
 
        @GetMapping("/get-ticket/{id}")
-    public ResponseEntity<Ticket> getTicketById(@PathVariable String id) {
+    public ResponseEntity<TicketResponseDTO> getTicketById(@PathVariable String id) throws InvocationTargetException, IllegalAccessException {
         Ticket ticket = ticketService.findTicketById(id);
-        return ResponseEntity.ok(ticket);
+           TicketResponseDTO ticketResponseDTO = new TicketResponseDTO();
+           BeanUtils.copyProperties(ticketResponseDTO, ticket);
+        return ResponseEntity.ok(ticketResponseDTO);
     }
 
     @PostMapping("/create-ticket")
     public ResponseEntity<TicketResponseDTO> createTicket(@RequestBody @Valid TicketCreateDTO ticketCreateDTO) throws InvocationTargetException, IllegalAccessException {
-        var Ticket = new Ticket();
-        BeanUtils.copyProperties(Ticket, ticketCreateDTO);
-        Ticket = ticketService.saveTicket(Ticket);
+        var ticket = new Ticket();
+        BeanUtils.copyProperties(ticket, ticketCreateDTO);
+        ticket = ticketService.saveTicket(ticket);
         TicketResponseDTO ticketResponseDTO = new TicketResponseDTO();
-        BeanUtils.copyProperties(ticketResponseDTO, Ticket);
+        BeanUtils.copyProperties(ticketResponseDTO, ticket);
         return ResponseEntity.status(HttpStatus.CREATED).body(ticketResponseDTO);
     }
 
     @PutMapping("/update-ticket/{id}")
-    public ResponseEntity<Ticket> updateTicket(@RequestBody @Valid TicketCreateDTO ticketCreateDto,
-                                             @PathVariable String id) throws InvocationTargetException, IllegalAccessException {
+    public ResponseEntity<TicketResponseDTO> updateTicket(@RequestBody @Valid TicketCreateDTO ticketCreateDto,
+                                                          @PathVariable String id) throws InvocationTargetException, IllegalAccessException {
 
         Ticket ticketToUpdate = new Ticket();
         BeanUtils.copyProperties(ticketToUpdate, ticketCreateDto);
         ticketToUpdate.setTicketId(id);
         Ticket updatedTicket = ticketService.updateTicket(ticketToUpdate);
-        return ResponseEntity.status(HttpStatus.OK).body(updatedTicket);
+        TicketResponseDTO ticketResponseDTO = new TicketResponseDTO();
+        BeanUtils.copyProperties(ticketResponseDTO, updatedTicket);
+        return ResponseEntity.status(HttpStatus.OK).body(ticketResponseDTO);
     }
 
 

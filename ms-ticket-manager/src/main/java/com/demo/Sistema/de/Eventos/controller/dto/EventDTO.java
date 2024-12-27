@@ -7,7 +7,7 @@ public class EventDTO {
 
     private String eventId;
     private String eventName;
-    private LocalDateTime eventDateTime;
+    private LocalDateTime dateTime;
     private String cep;
     private String logradouro;
     private String bairro;
@@ -30,12 +30,12 @@ public class EventDTO {
         this.eventName = eventName;
     }
 
-    public LocalDateTime getEventDateTime() {
-        return eventDateTime;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setEventDateTime(LocalDateTime eventDateTime) {
-        this.eventDateTime = eventDateTime;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getCep() {

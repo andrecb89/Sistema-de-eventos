@@ -9,6 +9,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.NoSuchElementException;
 
 
 @Service
@@ -24,12 +25,15 @@ public class TicketService {
 
         public Ticket findTicketById(String ticketId) {
         return ticketRepository.findByTicketIdAndDeletedFalse(ticketId).orElseThrow(
-                () -> new RuntimeException("Ticketo não encontrado")
+                () -> new RuntimeException("Ticket não encontrado")
         );
     }
 
        public Ticket saveTicket(Ticket ticket) throws InvocationTargetException, IllegalAccessException {
            EventDTO infoAdress = eventClient.getInfoEvent(ticket.getEventId());
+           if(infoAdress.getEventName() == null){
+               throw new NoSuchElementException("Evento não encontrado");
+           }
            var event = new Event();
            BeanUtils.copyProperties(event,infoAdress);
            ticket.setEvent(event);
