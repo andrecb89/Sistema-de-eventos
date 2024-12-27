@@ -1,10 +1,8 @@
 package com.demo.Sistema.de.Eventos.entities;
 
 
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
 
-import java.util.List;
 
 
 public class Ticket {
