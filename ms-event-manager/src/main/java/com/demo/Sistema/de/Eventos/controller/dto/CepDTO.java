@@ -38,4 +38,11 @@ public class CepDTO {
     public void setUf(String uf) {
         this.uf = uf;
     }
+
+    public CepDTO(String logradouro, String bairro, String localidade, String uf) {
+        this.logradouro = logradouro;
+        this.bairro = bairro;
+        this.localidade = localidade;
+        this.uf = uf;
+    }
 }
