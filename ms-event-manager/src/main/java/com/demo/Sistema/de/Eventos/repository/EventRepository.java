@@ -19,18 +19,4 @@ public interface EventRepository extends MongoRepository<Event, String> {
     List<Event> findByDeletedFalseOrderByEventNameAsc();
 
 
-
-//    default void softDeleteWithId(ObjectId id) {
-//        Event event = findById(id).orElseThrow(() -> new RuntimeException("Evento não encontrado"));
-//        event.setDeleted(true);
-//        save(event);
-//    }
-//
-//    default void softDeleteWithCpf(String cpf) {
-//        Event event = findByCpf(cpf).orElseThrow(() -> new RuntimeException("Evento não encontrado"));
-//        event.setDeleted(true);
-//        save(event);
-//    }
-//
-//    Optional<Event> findByCpf(String cpf);
 }
