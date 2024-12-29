@@ -2,9 +2,12 @@ package com.demo.Sistema.de.Eventos.controller.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.annotation.Id;
+
 import java.time.LocalDateTime;
 
 public class EventCreateDTO {
+
 
     @NotBlank
     private String eventName;
@@ -12,6 +15,7 @@ public class EventCreateDTO {
     private LocalDateTime dateTime;
     @NotBlank
     private String cep;
+
 
     public @NotBlank String getEventName() {
         return eventName;
@@ -39,5 +43,6 @@ public class EventCreateDTO {
 
     public EventCreateDTO() {
     }
+
 
 }

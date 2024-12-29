@@ -1,0 +1,245 @@
+openapi: 3.0.1
+info:
+  title: ms-ticket-manager API
+  description: API for managing tickets
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081/api/v1
+paths:
+  /create-ticket:
+    post:
+      summary: Create a new ticket
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerName:
+                  type: string
+                cpf:
+                  type: string
+                customerMail:
+                  type: string
+                eventName:
+                  type: string
+                eventId:
+                  type: string
+                tickets:
+                  type: integer
+              required:
+                - customerName
+                - cpf
+                - customerMail
+                - eventName
+                - eventId
+                - tickets
+      responses:
+        '200':
+          description: Ticket created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customerName:
+                    type: string
+                  cpf:
+                    type: string
+                  customerMail:
+                    type: string
+                  event:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        eventId:
+                          type: string
+                        eventName:
+                          type: string
+                        eventDateTime:
+                          type: string
+                          format: date-time
+                        logradouro:
+                          type: string
+                        bairro:
+                          type: string
+                        cidade:
+                          type: string
+                        uf:
+                          type: string
+                  status:
+                    type: string
+  /get-ticket/{id}:
+    get:
+      summary: Retrieve a ticket by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ticket retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticketId:
+                    type: string
+                  customerName:
+                    type: string
+                  cpf:
+                    type: string
+                  customerMail:
+                    type: string
+                  eventName:
+                    type: string
+                  eventId:
+                    type: string
+                  tickets:
+                    type: integer
+        '404':
+          description: Ticket not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /get-ticket-bt-cpf/{cpf}:
+    get:
+      summary: Retrieve tickets by CPF
+      parameters:
+        - name: cpf
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tickets retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tickets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ticketId:
+                          type: string
+                        eventName:
+                          type: string
+                        eventId:
+                          type: string
+        '404':
+          description: No tickets found for this CPF
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /cancel-ticket/{id}:
+    delete:
+      summary: Delete a ticket by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ticket deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Ticket not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /cancel-ticket/{cpf}:
+    delete:
+      summary: Cancel tickets by CPF
+      parameters:
+        - name: cpf
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tickets deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: No tickets found for this CPF
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /check-tickets-by-event/{eventId}:
+    get:
+      summary: Check tickets linked to an event
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tickets linked to the event retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventId:
+                    type: string
+                  tickets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ticketId:
+                          type: string
+                        customerName:
+                          type: string
+                        cpf:
+                          type: string
+        '404':
+          description: No tickets found for this event
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string

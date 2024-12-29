@@ -43,9 +43,9 @@ public class TicketService {
            BeanUtils.copyProperties(event,infoAdress);
            ticket.setEvent(event);
            Email email = new Email();
-           email.setOwnerRef("Andre");
-           email.setEmailFrom("andre_c_branco@gmail.com");
-           email.setEmailTo("andre_c_branco@estudante.sc.senai.br");
+           email.setOwnerRef(ticket.getCustomerName());
+           email.setEmailFrom("eventos@contato.com.br");
+           email.setEmailTo(ticket.getCustomerMail());
            email.setSubject(event.getEventName());
            String body = String.format(
                    "Olá %s,\n\n" +
@@ -53,15 +53,15 @@ public class TicketService {
                            "Detalhes do Evento:\n" +
                            "Nome: %s\n" +
                            "Data: %s\n" +
-                           "Local: %s, %s, %s - %s \n\n" +  // Se o evento tiver um local
+                           "Local: %s, %s, %s - %s \n\n" +
                            "Obrigado por participar!\n\n" +
                            "Atenciosamente,\n" +
                            "Equipe do Sistema de Eventos",
-                   ticket.getCustomerName(),  // Inserindo o nome do proprietário no corpo
-                   event.getEventName(),  // Nome do evento
-                   event.getEventName(),  // Nome do evento (novamente, pode ser substituído por outro atributo)
-                   event.getDateTime(),  // Se o evento tiver uma data, substitua por esse atributo
-                   event.getLogradouro(),  // Se o evento tiver um local, substitua por esse atributo
+                   ticket.getCustomerName(),
+                   event.getEventName(),
+                   event.getEventName(),
+                   event.getDateTime(),
+                   event.getLogradouro(),
                    event.getBairro(),
                    event.getLocalidade(),
                    event.getUf()

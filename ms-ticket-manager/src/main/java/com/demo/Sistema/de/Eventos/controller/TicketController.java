@@ -5,6 +5,11 @@ import com.demo.Sistema.de.Eventos.controller.dto.TicketResponseDTO;
 import com.demo.Sistema.de.Eventos.entities.Event;
 import com.demo.Sistema.de.Eventos.entities.Ticket;
 import com.demo.Sistema.de.Eventos.service.TicketService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +26,18 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
+    @Operation(
+            summary = "Get ticket by ID",
+            parameters = @Parameter(name = "id", description = "Ticket Id", required = true),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Ticket details",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TicketResponseDTO.class))
+                    )
+            }
 
+    )
        @GetMapping("/get-ticket/{id}")
     public ResponseEntity<TicketResponseDTO> getTicketById(@PathVariable String id) throws InvocationTargetException, IllegalAccessException {
         Ticket ticket = ticketService.findTicketById(id);
@@ -30,6 +46,18 @@ public class TicketController {
         return ResponseEntity.ok(ticketResponseDTO);
     }
 
+
+    @Operation(
+            summary = "Create a new ticket",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Ticket created successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TicketResponseDTO.class))
+                    )
+            }
+
+    )
     @PostMapping("/create-ticket")
     public ResponseEntity<TicketResponseDTO> createTicket(@RequestBody @Valid TicketCreateDTO ticketCreateDTO) throws InvocationTargetException, IllegalAccessException {
         var ticket = new Ticket();
@@ -39,6 +67,19 @@ public class TicketController {
         BeanUtils.copyProperties(ticketResponseDTO, ticket);
         return ResponseEntity.status(HttpStatus.CREATED).body(ticketResponseDTO);
     }
+
+    @Operation(
+            summary = "Update an ticket by ID",
+            parameters = @Parameter(name = "id", description = "Ticket Id", required = true),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Ticket updated successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TicketResponseDTO.class))
+                    )
+            }
+
+    )
 
     @PutMapping("/update-ticket/{id}")
     public ResponseEntity<TicketResponseDTO> updateTicket(@RequestBody @Valid TicketCreateDTO ticketCreateDto,
@@ -53,6 +94,19 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(ticketResponseDTO);
     }
 
+
+    @Operation(
+            summary = "Delete an ticket by ID",
+            parameters = @Parameter(name = "id", description = "Ticket Id", required = true),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Ticket deleted successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TicketResponseDTO.class))
+                    )
+            }
+
+    )
 
     @DeleteMapping("/cancel-ticket/{id}")
     public ResponseEntity<?> deleteTicketById(@PathVariable String id) {
