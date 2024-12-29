@@ -7,14 +7,18 @@ import com.demo.Sistema.de.Eventos.entities.Email;
 import com.demo.Sistema.de.Eventos.entities.Event;
 import com.demo.Sistema.de.Eventos.entities.Ticket;
 import com.demo.Sistema.de.Eventos.repository.TicketRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 
+@Slf4j
 @Service
 public class TicketService {
 
@@ -30,8 +34,10 @@ public class TicketService {
 
         public Ticket findTicketById(String ticketId) {
         return ticketRepository.findByTicketIdAndDeletedFalse(ticketId).orElseThrow(
-                () -> new RuntimeException("Ticket não encontrado")
-        );
+                () -> {
+                    log.error("Event not found with id " + ticketId);
+                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found with id " + ticketId);
+                });
     }
 
        public Ticket saveTicket(Ticket ticket) throws InvocationTargetException, IllegalAccessException {
@@ -90,7 +96,11 @@ public class TicketService {
 
     public void softDeleteTicketById(String ticketId) {
         Ticket ticket = ticketRepository.findByTicketIdAndDeletedFalse(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket não encontrado"));
+                .orElseThrow(() -> {
+                            log.error("Ticket not found with id " + ticketId);
+                            return new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found with id " + ticketId);
+                        }
+                );
         ticket.setDeleted(true);
         ticketRepository.save(ticket);
     }
