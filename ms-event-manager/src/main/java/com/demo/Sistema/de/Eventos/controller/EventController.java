@@ -45,7 +45,7 @@ public class EventController {
     )
     @GetMapping("/get-all-events")
     public ResponseEntity<List<Event>> getAllEvents() {
-
+        log.info("Getting all events");
         List<Event> event = eventService.findAllEvents();
         return ResponseEntity.ok().body(event);
     }
@@ -64,6 +64,7 @@ public class EventController {
     )
     @GetMapping("/get-all-events/sorted")
     public ResponseEntity<List<Event>> getAllEventsSorted() {
+        log.info("Getting all events sorted");
         List<Event> event = eventService.findAllEventsSorted();
         return ResponseEntity.ok().body(event);
     }
@@ -82,6 +83,7 @@ public class EventController {
     )
     @GetMapping("/get-event/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable String id) {
+        log.info("Getting event by ID");
         try {
             Event event = eventService.findEventById(id);
             return ResponseEntity.ok(event);
@@ -104,6 +106,7 @@ public class EventController {
     )
     @PostMapping("/create-event")
     public ResponseEntity<EventResponseDTO> createEvent(@RequestBody @Valid EventCreateDTO eventCreateDTO) throws InvocationTargetException, IllegalAccessException {
+        log.info("Creating a new event");
         var event = new Event();
         BeanUtils.copyProperties(event, eventCreateDTO);
         event = eventService.saveEvent(event);
@@ -127,7 +130,7 @@ public class EventController {
     @PutMapping("/update-event/{id}")
     public ResponseEntity<EventResponseDTO> updateEvent(@RequestBody @Valid EventCreateDTO eventCreateDto,
                                              @PathVariable String id) throws InvocationTargetException, IllegalAccessException {
-
+        log.info("Updating an event by ID");
         Event eventToUpdate = new Event();
         BeanUtils.copyProperties(eventToUpdate, eventCreateDto);
         eventToUpdate.setEventId(id);
@@ -153,6 +156,7 @@ public class EventController {
 
     @DeleteMapping("/cancel-ticket/{id}")
     public ResponseEntity<?> deleteEventById(@PathVariable String id) {
+        log.info("Deleting an event by ID");
         eventService.softDeleteEvent(id);
         return ResponseEntity.ok("Deleted successfully");
     }
