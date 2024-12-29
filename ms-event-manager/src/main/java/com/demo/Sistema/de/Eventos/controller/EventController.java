@@ -3,6 +3,7 @@ package com.demo.Sistema.de.Eventos.controller;
 import com.demo.Sistema.de.Eventos.controller.dto.EventCreateDTO;
 import com.demo.Sistema.de.Eventos.controller.dto.EventResponseDTO;
 import com.demo.Sistema.de.Eventos.entities.Event;
+import com.demo.Sistema.de.Eventos.exception.EntityNotFoundException;
 import com.demo.Sistema.de.Eventos.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+@Slf4j
 @RestController
 public class EventController {
 
@@ -42,6 +45,7 @@ public class EventController {
     )
     @GetMapping("/get-all-events")
     public ResponseEntity<List<Event>> getAllEvents() {
+
         List<Event> event = eventService.findAllEvents();
         return ResponseEntity.ok().body(event);
     }
@@ -78,8 +82,14 @@ public class EventController {
     )
     @GetMapping("/get-event/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable String id) {
-        Event event = eventService.findEventById(id);
-        return ResponseEntity.ok(event);
+        try {
+            Event event = eventService.findEventById(id);
+            return ResponseEntity.ok(event);
+        } catch (EntityNotFoundException e) {
+            log.error("Entity not found", e);
+            throw new EntityNotFoundException(e.getMessage());
+        }
+
     }
     @Operation(
             summary = "Create a new event",

@@ -3,11 +3,16 @@ package com.demo.Sistema.de.Eventos.service;
 import com.demo.Sistema.de.Eventos.client.ViacepClient;
 import com.demo.Sistema.de.Eventos.controller.dto.CepDTO;
 import com.demo.Sistema.de.Eventos.entities.Event;
+import com.demo.Sistema.de.Eventos.exception.EntityNotFoundException;
 import com.demo.Sistema.de.Eventos.repository.EventRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class EventService {
 
@@ -28,8 +33,11 @@ public class EventService {
 
     public Event findEventById(String id) {
         return eventRepository.findByEventIdAndDeletedFalse(id).orElseThrow(
-                () -> new RuntimeException("Evento não encontrado")
-        );
+                () -> {
+                    log.error("Event not found with id " + id);
+                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found with id " + id);
+                });
+
     }
 
     public Event updateEvent(Event event) {
@@ -62,8 +70,13 @@ public class EventService {
 
     public void softDeleteEvent(String id) {
         Event event = eventRepository.findByEventIdAndDeletedFalse(id)
-                .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
-        event.setDeleted(true);
+                .orElseThrow(() -> {
+                    log.error("Entity not found");
+                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found with id " + id);
+                        }
+                );
+
+                event.setDeleted(true);
         eventRepository.save(event);
     }
 }
