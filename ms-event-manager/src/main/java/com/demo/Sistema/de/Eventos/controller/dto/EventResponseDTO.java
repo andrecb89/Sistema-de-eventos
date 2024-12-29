@@ -9,8 +9,7 @@ import java.time.LocalDateTime;
 
 public class EventResponseDTO {
 
-
-    private String id;
+    private String eventId;
     private String eventName;
     private LocalDateTime dateTime;
     private String cep;
@@ -19,12 +18,12 @@ public class EventResponseDTO {
     private String localidade;
     private String uf;
 
-    public String getId() {
-        return id;
+    public String getEventId() {
+        return eventId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
     public String getEventName() {

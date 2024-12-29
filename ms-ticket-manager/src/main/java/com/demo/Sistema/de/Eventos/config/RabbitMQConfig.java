@@ -1,4 +1,4 @@
-package com.demo.Sistema.de.Eventos.configs;
+package com.demo.Sistema.de.Eventos.config;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Value;
