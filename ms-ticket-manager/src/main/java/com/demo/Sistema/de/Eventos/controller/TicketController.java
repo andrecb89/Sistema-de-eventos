@@ -113,7 +113,7 @@ public class TicketController {
     )
 
     @DeleteMapping("/cancel-ticket/{id}")
-    public ResponseEntity<?> deleteTicketById(@PathVariable String id) {
+    public ResponseEntity<String> deleteTicketById(@PathVariable String id) {
         log.info("Deleting ticket by ID");
         ticketService.softDeleteTicketById(id);
         return ResponseEntity.ok("Deleted successfully");

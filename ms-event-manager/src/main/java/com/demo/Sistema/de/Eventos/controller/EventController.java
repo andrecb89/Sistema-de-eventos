@@ -84,7 +84,6 @@ public class EventController {
     @GetMapping("/get-event/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable String id) {
         log.info("Getting event by ID");
-        try {
             Event event = eventService.findEventById(id);
             return ResponseEntity.ok(event);
 
@@ -151,9 +150,8 @@ public class EventController {
     )
 
     @DeleteMapping("/cancel-ticket/{id}")
-    public ResponseEntity<?> deleteEventById(@PathVariable String id) {
-        log.info("Deleting an event by ID");
     public ResponseEntity<String> deleteEventById(@PathVariable String id) {
+        log.info("Deleting an event by ID");
         eventService.softDeleteEvent(id);
         return ResponseEntity.ok("Deleted successfully");
     }

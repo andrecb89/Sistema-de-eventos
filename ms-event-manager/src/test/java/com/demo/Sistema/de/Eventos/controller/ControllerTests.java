@@ -102,7 +102,7 @@ public class ControllerTests {
     }
 
     @Test
-    public void UpdateEvent_WithValidData_shouldEqualExpectedResult() {
+    public void UpdateEvent_WithValidData_shouldEqualExpectedResult() throws InvocationTargetException, IllegalAccessException {
         Event returnEvent = mockEvent.mockEvent();
         EventCreateDTO returnEventDTO = mockEvent.mockEventDTO();
         when(eventService.updateEvent(any(Event.class))).thenReturn(new Event("Show de musica",
