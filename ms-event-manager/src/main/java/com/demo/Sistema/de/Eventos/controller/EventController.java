@@ -81,14 +81,9 @@ public class EventController {
 
     )
     @GetMapping("/get-event/{id}")
-    public ResponseEntity<Event> getEventById(@PathVariable String id) {
-        try {
+    public ResponseEntity<Event> getEventById(@PathVariable String id) throws EntityNotFoundException {
             Event event = eventService.findEventById(id);
             return ResponseEntity.ok(event);
-        } catch (EntityNotFoundException e) {
-            log.error("Entity not found", e);
-            throw new EntityNotFoundException(e.getMessage());
-        }
 
     }
     @Operation(
@@ -126,15 +121,18 @@ public class EventController {
     )
     @PutMapping("/update-event/{id}")
     public ResponseEntity<EventResponseDTO> updateEvent(@RequestBody @Valid EventCreateDTO eventCreateDto,
-                                             @PathVariable String id) throws InvocationTargetException, IllegalAccessException {
-
-        Event eventToUpdate = new Event();
-        BeanUtils.copyProperties(eventToUpdate, eventCreateDto);
-        eventToUpdate.setEventId(id);
-        Event updatedEvent = eventService.updateEvent(eventToUpdate);
-        EventResponseDTO eventResponseDTO = new EventResponseDTO();
-        BeanUtils.copyProperties(eventResponseDTO, updatedEvent);
-        return ResponseEntity.status(HttpStatus.OK).body(eventResponseDTO);
+                                             @PathVariable String id) {
+try {
+    Event eventToUpdate = new Event();
+    BeanUtils.copyProperties(eventToUpdate, eventCreateDto);
+    eventToUpdate.setEventId(id);
+    Event updatedEvent = eventService.updateEvent(eventToUpdate);
+    EventResponseDTO eventResponseDTO = new EventResponseDTO();
+    BeanUtils.copyProperties(eventResponseDTO, updatedEvent);
+    return ResponseEntity.status(HttpStatus.OK).body(eventResponseDTO);
+}catch (InvocationTargetException | IllegalAccessException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
 
     }
 
@@ -152,7 +150,7 @@ public class EventController {
     )
 
     @DeleteMapping("/cancel-ticket/{id}")
-    public ResponseEntity<?> deleteEventById(@PathVariable String id) {
+    public ResponseEntity<String> deleteEventById(@PathVariable String id) {
         eventService.softDeleteEvent(id);
         return ResponseEntity.ok("Deleted successfully");
     }
