@@ -2,7 +2,6 @@ package com.demo.Sistema.de.Eventos.controller;
 
 import com.demo.Sistema.de.Eventos.controller.dto.TicketCreateDTO;
 import com.demo.Sistema.de.Eventos.controller.dto.TicketResponseDTO;
-import com.demo.Sistema.de.Eventos.entities.Event;
 import com.demo.Sistema.de.Eventos.entities.Ticket;
 import com.demo.Sistema.de.Eventos.service.TicketService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 @Slf4j
 @RestController
