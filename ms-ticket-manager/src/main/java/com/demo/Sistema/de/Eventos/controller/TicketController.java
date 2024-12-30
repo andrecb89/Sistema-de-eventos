@@ -96,9 +96,8 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(ticketResponseDTO);
     }
 
-
     @Operation(
-            summary = "Delete an ticket by ID",
+            summary = "Delete a ticket by ID",
             parameters = @Parameter(name = "id", description = "Ticket Id", required = true),
             responses = {
                     @ApiResponse(
@@ -116,7 +115,5 @@ public class TicketController {
         ticketService.softDeleteTicketById(id);
         return ResponseEntity.ok("Deleted successfully");
     }
-
-
 
 }

@@ -82,5 +82,17 @@ public class Event {
         this.uf = uf;
     }
 
+    public Event() {
+    }
 
+    public Event(String eventId, String eventName, LocalDateTime dateTime, String cep, String logradouro, String bairro, String localidade, String uf) {
+        this.eventId = eventId;
+        this.eventName = eventName;
+        this.dateTime = dateTime;
+        this.cep = cep;
+        this.logradouro = logradouro;
+        this.bairro = bairro;
+        this.localidade = localidade;
+        this.uf = uf;
+    }
 }

@@ -41,46 +41,38 @@ public class ControllerTests {
     }
 
     @Test
-    public void GetAllEvents_TurnIntoSingleton_ExpectListSizeOfOne() {
+    public void GetAllEvents_TurnIntoSingleton_ExpectListSizeOfOne() throws InvocationTargetException, IllegalAccessException {
         List<Event> events = Collections.singletonList(mockEvent.mockEvent());
         when(eventService.findAllEvents()).thenReturn(events);
 
-        List<Event> result = eventController.getAllEvents().getBody();
+        List<EventResponseDTO> result = eventController.getAllEvents().getBody();
 
         assertEquals(1, result.size());
     }
 
     @Test
-    public void GetAllEventsSorted_TurnIntoSingleton_ExpectListSizeOfOne() {
+    public void GetAllEventsSorted_TurnIntoSingleton_ExpectListSizeOfOne() throws InvocationTargetException, IllegalAccessException {
         List<Event> events = Collections.singletonList(mockEvent.mockEvent());
         when(eventService.findAllEventsSorted()).thenReturn(events);
 
-        List<Event> result = eventController.getAllEventsSorted().getBody();
+        List<EventResponseDTO> result = eventController.getAllEventsSorted().getBody();
 
         assertEquals(1, result.size());
     }
 
     @Test
-    public void GetEventById_WithValidId_ExpectEventFound() {
+    public void GetEventById_WithValidId_ExpectEventFound() throws InvocationTargetException, IllegalAccessException {
         Event event = mockEvent.mockEvent();
+        EventResponseDTO dto = mockEvent.mockEventResponseDTO();
         when(eventService.findEventById(event.getEventId())).thenReturn(event);
 
-        ResponseEntity<Event> result = eventController.getEventById(event.getEventId());
+        ResponseEntity<EventResponseDTO> result = eventController.getEventById(event.getEventId());
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals(event, result.getBody());
+        assertEquals(dto.getEventName(), result.getBody().getEventName());
+        assertEquals(dto.getBairro(), result.getBody().getBairro());
     }
 
-
-
-
-
-//    @Test
-//    public void GetEventById_WithInvalidId_ExpectException() {
-//        assertThatThrownBy(() -> eventController.getEventById("00000000000000"))
-//                .isInstanceOf(EntityNotFoundException.class)
-//                .hasMessageContaining("Entity not found");
-//    }
 
     @Test
     public void CreateEvent_WithValidData_ExpectEventCreated() throws InvocationTargetException, IllegalAccessException {

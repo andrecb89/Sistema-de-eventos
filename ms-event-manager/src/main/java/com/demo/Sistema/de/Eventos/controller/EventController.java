@@ -18,7 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.apache.commons.beanutils.BeanUtils.copyProperties;
 
 @Slf4j
 @RestController
@@ -44,10 +47,16 @@ public class EventController {
 
     )
     @GetMapping("/get-all-events")
-    public ResponseEntity<List<Event>> getAllEvents() {
+    public ResponseEntity<List<EventResponseDTO>> getAllEvents() throws InvocationTargetException, IllegalAccessException {
         log.info("Getting all events");
-        List<Event> event = eventService.findAllEvents();
-        return ResponseEntity.ok().body(event);
+        List<Event> events = eventService.findAllEvents();
+        List<EventResponseDTO> eventResponseDTOS = new ArrayList<>();
+        for (Event event : events) {
+            EventResponseDTO dto = new EventResponseDTO();
+            BeanUtils.copyProperties(dto, event);
+            eventResponseDTOS.add(dto);
+        }
+        return ResponseEntity.ok().body(eventResponseDTOS);
     }
 
     @Operation(
@@ -63,10 +72,16 @@ public class EventController {
 
     )
     @GetMapping("/get-all-events/sorted")
-    public ResponseEntity<List<Event>> getAllEventsSorted() {
+    public ResponseEntity<List<EventResponseDTO>> getAllEventsSorted() throws InvocationTargetException, IllegalAccessException {
         log.info("Getting all events sorted");
-        List<Event> event = eventService.findAllEventsSorted();
-        return ResponseEntity.ok().body(event);
+        List<Event> events = eventService.findAllEventsSorted();
+        List<EventResponseDTO> eventResponseDTOS = new ArrayList<>();
+        for (Event event : events) {
+            EventResponseDTO dto = new EventResponseDTO();
+            BeanUtils.copyProperties(dto, event);
+            eventResponseDTOS.add(dto);
+        }
+        return ResponseEntity.ok().body(eventResponseDTOS);
     }
 
     @Operation(
@@ -82,10 +97,12 @@ public class EventController {
 
     )
     @GetMapping("/get-event/{id}")
-    public ResponseEntity<Event> getEventById(@PathVariable String id) {
+    public ResponseEntity<EventResponseDTO> getEventById(@PathVariable String id) throws InvocationTargetException, IllegalAccessException {
         log.info("Getting event by ID");
             Event event = eventService.findEventById(id);
-            return ResponseEntity.ok(event);
+            EventResponseDTO dto = new EventResponseDTO();
+            copyProperties(dto,event);
+            return ResponseEntity.ok(dto);
 
     }
     @Operation(
@@ -103,10 +120,10 @@ public class EventController {
     public ResponseEntity<EventResponseDTO> createEvent(@RequestBody @Valid EventCreateDTO eventCreateDTO) throws InvocationTargetException, IllegalAccessException {
         log.info("Creating a new event");
         var event = new Event();
-        BeanUtils.copyProperties(event, eventCreateDTO);
+        copyProperties(event, eventCreateDTO);
         event = eventService.saveEvent(event);
         EventResponseDTO eventResponseDTO = new EventResponseDTO();
-        BeanUtils.copyProperties(eventResponseDTO, event);
+        copyProperties(eventResponseDTO, event);
         return ResponseEntity.status(HttpStatus.CREATED).body(eventResponseDTO);
     }
 
@@ -127,11 +144,11 @@ public class EventController {
                                              @PathVariable String id) throws InvocationTargetException, IllegalAccessException {
         log.info("Updating an event by ID");
         Event eventToUpdate = new Event();
-        BeanUtils.copyProperties(eventToUpdate, eventCreateDto);
+        copyProperties(eventToUpdate, eventCreateDto);
         eventToUpdate.setEventId(id);
         Event updatedEvent = eventService.updateEvent(eventToUpdate);
         EventResponseDTO eventResponseDTO = new EventResponseDTO();
-        BeanUtils.copyProperties(eventResponseDTO, updatedEvent);
+        copyProperties(eventResponseDTO, updatedEvent);
         return ResponseEntity.status(HttpStatus.OK).body(eventResponseDTO);
 
     }

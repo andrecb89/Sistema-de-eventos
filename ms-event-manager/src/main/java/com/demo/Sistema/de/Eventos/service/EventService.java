@@ -3,7 +3,6 @@ package com.demo.Sistema.de.Eventos.service;
 import com.demo.Sistema.de.Eventos.client.ViacepClient;
 import com.demo.Sistema.de.Eventos.controller.dto.CepDTO;
 import com.demo.Sistema.de.Eventos.entities.Event;
-import com.demo.Sistema.de.Eventos.exception.EntityNotFoundException;
 import com.demo.Sistema.de.Eventos.repository.EventRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

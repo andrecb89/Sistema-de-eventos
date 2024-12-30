@@ -20,6 +20,7 @@ public class TicketCreateDTO {
     private String eventId;
     @NotBlank
     private String customerMail;
+    private Event event;
     private Double BRLamount;
     private Double USDamount;
 
@@ -45,6 +46,14 @@ public class TicketCreateDTO {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     public @NotBlank String getEventId() {

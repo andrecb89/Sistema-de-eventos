@@ -89,6 +89,34 @@ public class TicketService {
         existingTicket.setBRLamount(ticket.getBRLamount());
         existingTicket.setUSDamount(ticket.getUSDamount());
 
+        Email email = new Email();
+        email.setOwnerRef(ticket.getCustomerName());
+        email.setEmailFrom("eventos@contato.com.br");
+        email.setEmailTo(ticket.getCustomerMail());
+        email.setSubject(existingTicket.getEvent().getEventName());
+        String body = String.format(
+                "Olá %s,\n\n" +
+                        "Você foi inscrito no evento: %s.\n\n" +
+                        "Detalhes do Evento:\n" +
+                        "Nome: %s\n" +
+                        "Data: %s\n" +
+                        "Local: %s, %s, %s - %s \n\n" +
+                        "Obrigado por participar!\n\n" +
+                        "Atenciosamente,\n" +
+                        "Equipe do Sistema de Eventos",
+                ticket.getCustomerName(),
+                existingTicket.getEvent().getEventName(),
+                existingTicket.getEvent().getEventName(),
+                existingTicket.getEvent().getDateTime(),
+                existingTicket.getEvent().getLogradouro(),
+                existingTicket.getEvent().getBairro(),
+                existingTicket.getEvent().getLocalidade(),
+                existingTicket.getEvent().getUf()
+        );
+        email.setBody(body);
+
+        emailService.sendEmail(email);
+
         return ticketRepository.save(existingTicket);
     }
 
