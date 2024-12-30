@@ -1,10 +1,8 @@
 package com.demo.Sistema.de.Eventos.controller;
 
-import com.demo.Sistema.de.Eventos.client.ViacepClient;
 import com.demo.Sistema.de.Eventos.controller.dto.EventCreateDTO;
 import com.demo.Sistema.de.Eventos.controller.dto.EventResponseDTO;
 import com.demo.Sistema.de.Eventos.entities.Event;
-import com.demo.Sistema.de.Eventos.exception.EntityNotFoundException;
 import com.demo.Sistema.de.Eventos.mocks.MockEvent;
 import com.demo.Sistema.de.Eventos.service.EventService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +12,6 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
@@ -22,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -55,6 +51,16 @@ public class ControllerTests {
     }
 
     @Test
+    public void GetAllEventsSorted_TurnIntoSingleton_ExpectListSizeOfOne() {
+        List<Event> events = Collections.singletonList(mockEvent.mockEvent());
+        when(eventService.findAllEventsSorted()).thenReturn(events);
+
+        List<Event> result = eventController.getAllEventsSorted().getBody();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
     public void GetEventById_WithValidId_ExpectEventFound() {
         Event event = mockEvent.mockEvent();
         when(eventService.findEventById(event.getEventId())).thenReturn(event);
@@ -64,6 +70,10 @@ public class ControllerTests {
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(event, result.getBody());
     }
+
+
+
+
 
 //    @Test
 //    public void GetEventById_WithInvalidId_ExpectException() {

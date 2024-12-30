@@ -1,7 +1,6 @@
 package com.demo.Sistema.de.Eventos.service;
 
 import com.demo.Sistema.de.Eventos.client.EventClient;
-import com.demo.Sistema.de.Eventos.controller.dto.EmailDTO;
 import com.demo.Sistema.de.Eventos.controller.dto.EventDTO;
 import com.demo.Sistema.de.Eventos.entities.Email;
 import com.demo.Sistema.de.Eventos.entities.Event;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 
@@ -35,7 +33,7 @@ public class TicketService {
         public Ticket findTicketById(String ticketId) {
         return ticketRepository.findByTicketIdAndDeletedFalse(ticketId).orElseThrow(
                 () -> {
-                    log.error("Event not found with id " + ticketId);
+                    log.error("Ticket not found with id " + ticketId);
                     return new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found with id " + ticketId);
                 });
     }
