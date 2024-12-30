@@ -1,7 +1,6 @@
 package com.demo.Sistema.de.Eventos.entities;
 
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Email {

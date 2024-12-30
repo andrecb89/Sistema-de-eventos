@@ -102,4 +102,20 @@ public class Ticket {
     public Ticket() {
     }
 
+    public Ticket(String customerName, String cpf, String customerMail, String status, Double BRLamount) {
+        this.customerName = customerName;
+        this.cpf = cpf;
+        this.customerMail = customerMail;
+        this.status = status;
+        this.BRLamount = BRLamount;
+    }
+
+    public Ticket(String ticketId, String customerName, String cpf, String customerMail, String status, Double BRLamount) {
+        this.ticketId = ticketId;
+        this.customerName = customerName;
+        this.cpf = cpf;
+        this.customerMail = customerMail;
+        this.status = status;
+        this.BRLamount = BRLamount;
+    }
 }

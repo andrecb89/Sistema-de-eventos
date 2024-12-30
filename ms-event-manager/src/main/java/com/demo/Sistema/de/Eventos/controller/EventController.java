@@ -87,10 +87,6 @@ public class EventController {
         try {
             Event event = eventService.findEventById(id);
             return ResponseEntity.ok(event);
-        } catch (EntityNotFoundException e) {
-            log.error("Entity not found", e);
-            throw new EntityNotFoundException(e.getMessage());
-        }
 
     }
     @Operation(
@@ -157,6 +153,7 @@ public class EventController {
     @DeleteMapping("/cancel-ticket/{id}")
     public ResponseEntity<?> deleteEventById(@PathVariable String id) {
         log.info("Deleting an event by ID");
+    public ResponseEntity<String> deleteEventById(@PathVariable String id) {
         eventService.softDeleteEvent(id);
         return ResponseEntity.ok("Deleted successfully");
     }
