@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -30,7 +31,7 @@ public class TicketService {
         this.emailService = emailService;
     }
 
-        public Ticket findTicketById(String ticketId) {
+    public Ticket findTicketById(String ticketId) {
         return ticketRepository.findByTicketIdAndDeletedFalse(ticketId).orElseThrow(
                 () -> {
                     log.error("Ticket not found with id " + ticketId);
@@ -129,6 +130,11 @@ public class TicketService {
                 );
         ticket.setDeleted(true);
         ticketRepository.save(ticket);
+    }
+
+    public List<Ticket> checkTicketsByEventId(String eventId) {
+         List<Ticket> response = ticketRepository.findByEventIdAndDeletedFalse(eventId);
+        return response;
     }
 
 }

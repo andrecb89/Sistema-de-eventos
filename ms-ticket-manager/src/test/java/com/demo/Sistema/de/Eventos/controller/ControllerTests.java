@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,7 +39,7 @@ public class ControllerTests {
         mockTicket = new MockTicket();
     }
 
-        @Test
+    @Test
     public void GetTicketById_WithValidId_ExpectTicketFound() throws InvocationTargetException, IllegalAccessException {
         Ticket ticket = mockTicket.mockTicket();
         when(ticketService.findTicketById(ticket.getTicketId())).thenReturn(ticket);
@@ -89,8 +91,17 @@ public class ControllerTests {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo("Deleted successfully");
+    }
 
+    @Test
+    public void checkTicketsByEvent_WithValidEventId_ExpectListSizeOfOne() throws InvocationTargetException, IllegalAccessException {
+        List<Ticket> tickets = Collections.singletonList(mockTicket.mockTicket());
+        Ticket ticket = mockTicket.mockTicket();
+        when(ticketService.checkTicketsByEventId(ticket.getTicketId())).thenReturn(tickets);
 
+        List<TicketResponseDTO> result = ticketController.checkTicketsByEvent(ticket.getTicketId()).getBody();
+
+        assertEquals(1, result.size());
     }
 
 }

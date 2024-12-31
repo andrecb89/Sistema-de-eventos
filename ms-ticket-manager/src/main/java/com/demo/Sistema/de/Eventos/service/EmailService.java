@@ -1,6 +1,5 @@
 package com.demo.Sistema.de.Eventos.service;
 
-import com.demo.Sistema.de.Eventos.controller.dto.EmailDTO;
 import com.demo.Sistema.de.Eventos.entities.Email;
 import com.demo.Sistema.de.Eventos.repository.EmailRepository;
 import org.springframework.beans.factory.annotation.Autowired;

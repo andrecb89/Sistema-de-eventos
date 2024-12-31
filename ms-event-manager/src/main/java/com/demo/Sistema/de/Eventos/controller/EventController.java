@@ -1,7 +1,10 @@
 package com.demo.Sistema.de.Eventos.controller;
 
+import com.demo.Sistema.de.Eventos.client.TicketClient;
+import com.demo.Sistema.de.Eventos.client.ViacepClient;
 import com.demo.Sistema.de.Eventos.controller.dto.EventCreateDTO;
 import com.demo.Sistema.de.Eventos.controller.dto.EventResponseDTO;
+import com.demo.Sistema.de.Eventos.controller.dto.TicketResponseDTO;
 import com.demo.Sistema.de.Eventos.entities.Event;
 import com.demo.Sistema.de.Eventos.exception.EntityNotFoundException;
 import com.demo.Sistema.de.Eventos.service.EventService;
@@ -29,8 +32,10 @@ public class EventController {
 
 
     private EventService eventService;
+    private TicketClient ticketClient;
 
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService,TicketClient ticketClient) {
+        this.ticketClient = ticketClient;
         this.eventService = eventService;
     }
 
@@ -169,7 +174,12 @@ public class EventController {
     @DeleteMapping("/cancel-ticket/{id}")
     public ResponseEntity<String> deleteEventById(@PathVariable String id) {
         log.info("Deleting an event by ID");
-        eventService.softDeleteEvent(id);
-        return ResponseEntity.ok("Deleted successfully");
+        ResponseEntity<List<TicketResponseDTO>> response = ticketClient.getInfoEvent(id);
+        if(response.getBody().isEmpty()){
+            eventService.softDeleteEvent(id);
+            return ResponseEntity.ok("Deleted successfully");
+
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Can't delete event with tickets sold.");
     }
 }

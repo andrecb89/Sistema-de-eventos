@@ -12,7 +12,7 @@ public class OpenApiConfig {
     public OpenAPI api() {
         return new OpenAPI().info(
                 new Info()
-                        .title("API for Ticekt Management")
+                        .title("API for Ticket Management")
                         .description("API for ticket creation, modification, querying, and deletion.")
                         .version("1.0.0")
         );

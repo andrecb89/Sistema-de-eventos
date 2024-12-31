@@ -2,6 +2,7 @@ package com.demo.Sistema.de.Eventos.service;
 
 import com.demo.Sistema.de.Eventos.client.EventClient;
 import com.demo.Sistema.de.Eventos.controller.dto.EventDTO;
+import com.demo.Sistema.de.Eventos.entities.Event;
 import com.demo.Sistema.de.Eventos.entities.Ticket;
 import com.demo.Sistema.de.Eventos.mocks.MockTicket;
 import com.demo.Sistema.de.Eventos.repository.TicketRepository;
@@ -13,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.*;
@@ -97,15 +100,13 @@ public class ServiceTests {
         @Test
         public void UpdateTicket_WithValidData_shouldEqualExpectedResult() {
             Ticket returnTicket = mockTicket.mockTicket();
-//            when(ticketService.findTicketById(anyString())).thenReturn(returnTicket);
-            when(ticketRepository.findByTicketIdAndDeletedFalse("6772975c6eaae32cbfdc7c66")).thenReturn(
+            when(ticketRepository.findByTicketIdAndDeletedFalse(anyString())).thenReturn(
                     Optional.of(new Ticket("6772975c6eaae32cbfdc7c66","João",
                                     "01234567890", "joao@gmail.com", "Concluído",
                              50.00)));
             when(ticketRepository.save(any(Ticket.class))).thenReturn(returnTicket);
 
             Ticket ticket = ticketService.updateTicket(returnTicket);
-            System.out.println(ticket.getTicketId());
 
             assertEquals("João", ticket.getCustomerName());
             assertEquals("01234567890", ticket.getCpf());
@@ -116,11 +117,23 @@ public class ServiceTests {
 
 
         @Test
-        public void deleteTicket_WithInvalidId_ThrowsException() {
+        public void DeleteTicket_WithInvalidId_ThrowsException() {
             assertThatThrownBy(() -> ticketService.softDeleteTicketById("00000000000000"))
                     .isInstanceOf(ResponseStatusException.class)
                     .hasMessageContaining("Ticket not found with id 00000000000000");
 
 
         }
-    }
+
+    @Test
+    public void CheckTicketsByEvent_WithValidEventId_ExpectListSizeOfOne() {
+        List<Ticket> tickets = Collections.singletonList(mockTicket.mockTicket());
+        when(ticketRepository.findByEventIdAndDeletedFalse(anyString())).thenReturn(tickets);
+
+
+        List<Ticket> response = ticketService.checkTicketsByEventId("676aa088899e6c4a7b713a4a");
+
+        assertEquals(1, response.size());
+
+        }
+}

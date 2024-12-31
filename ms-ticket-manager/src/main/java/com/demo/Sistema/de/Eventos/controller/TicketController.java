@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -114,6 +116,31 @@ public class TicketController {
         log.info("Deleting ticket by ID");
         ticketService.softDeleteTicketById(id);
         return ResponseEntity.ok("Deleted successfully");
+    }
+
+    @Operation(
+            summary = "Returns tickets sold by specific event",
+            parameters = @Parameter(name = "eventId", description = "Event Id", required = true),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Tickets returned successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TicketResponseDTO.class))
+                    )
+            }
+
+    )
+    @GetMapping("/check-tickets-by-event/{eventId}")
+    public ResponseEntity<List<TicketResponseDTO>> checkTicketsByEvent(@PathVariable String eventId) throws InvocationTargetException, IllegalAccessException {
+        log.info("Checking tickets by event");
+        List<Ticket> response = ticketService.checkTicketsByEventId(eventId);
+        List<TicketResponseDTO> ticketResponseDTOS = new ArrayList<>();
+        for (Ticket ticket : response) {
+            TicketResponseDTO dto = new TicketResponseDTO();
+            BeanUtils.copyProperties(dto, ticket);
+            ticketResponseDTOS.add(dto);
+        }
+        return ResponseEntity.ok(ticketResponseDTOS);
     }
 
 }
