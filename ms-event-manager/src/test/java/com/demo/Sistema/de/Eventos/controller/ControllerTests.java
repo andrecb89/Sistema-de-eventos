@@ -1,7 +1,9 @@
 package com.demo.Sistema.de.Eventos.controller;
 
+import com.demo.Sistema.de.Eventos.client.TicketClient;
 import com.demo.Sistema.de.Eventos.controller.dto.EventCreateDTO;
 import com.demo.Sistema.de.Eventos.controller.dto.EventResponseDTO;
+import com.demo.Sistema.de.Eventos.controller.dto.TicketResponseDTO;
 import com.demo.Sistema.de.Eventos.entities.Event;
 import com.demo.Sistema.de.Eventos.mocks.MockEvent;
 import com.demo.Sistema.de.Eventos.service.EventService;
@@ -21,6 +23,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -29,6 +32,8 @@ public class ControllerTests {
 
     @Mock
     private EventService eventService;
+    @Mock
+    private TicketClient ticketClient;
 
     @InjectMocks
     private EventController eventController;
@@ -115,7 +120,10 @@ public class ControllerTests {
 
     @Test
     public void DeleteEvent_WithValidId_ReturnsOkStatus() {
-        doNothing().when(eventService).softDeleteEvent("00000000000000");
+        doNothing().when(eventService).softDeleteEvent(anyString());
+        List<TicketResponseDTO> emptyList = List.of();
+        ResponseEntity<List<TicketResponseDTO>> responseEntity = ResponseEntity.ok(emptyList);
+        when(ticketClient.getInfoEvent(anyString())).thenReturn((responseEntity));
 
         ResponseEntity<String> response = eventController.deleteEventById("00000000000000");
 

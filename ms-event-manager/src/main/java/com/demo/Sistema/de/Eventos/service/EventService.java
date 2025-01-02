@@ -1,20 +1,23 @@
 package com.demo.Sistema.de.Eventos.service;
 
 import com.demo.Sistema.de.Eventos.client.ViacepClient;
+import com.demo.Sistema.de.Eventos.controller.EventController;
 import com.demo.Sistema.de.Eventos.controller.dto.CepDTO;
 import com.demo.Sistema.de.Eventos.entities.Event;
 import com.demo.Sistema.de.Eventos.repository.EventRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-@Slf4j
+
 @Service
 public class EventService {
-
+    private static final Logger log = LoggerFactory.getLogger(EventService.class);
     public EventRepository eventRepository;
     public ViacepClient viacepClient;
 
