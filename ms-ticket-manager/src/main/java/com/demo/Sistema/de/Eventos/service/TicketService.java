@@ -6,8 +6,9 @@ import com.demo.Sistema.de.Eventos.entities.Email;
 import com.demo.Sistema.de.Eventos.entities.Event;
 import com.demo.Sistema.de.Eventos.entities.Ticket;
 import com.demo.Sistema.de.Eventos.repository.TicketRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,9 +18,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 
-@Slf4j
 @Service
 public class TicketService {
+    private static final Logger log = LoggerFactory.getLogger(TicketService.class);
 
     public TicketRepository ticketRepository;
     public EventClient eventClient;

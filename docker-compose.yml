@@ -1,0 +1,79 @@
+services:
+  # Serviço 1: MongoDB - Banco de dados 1
+  db_event:
+    image: mongo:8.0.3
+    container_name: db_event
+    restart: always
+    volumes:
+      - db_event-data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network  # Conecta-se à rede app-network
+
+  # Serviço 2: MongoDB - Banco de dados 2
+  db_ticket:
+    image: mongo:8.0.3
+    container_name: db_ticket
+    restart: always
+    volumes:
+      - db_ticket-data:/data/db
+    ports:
+      - "27018:27017"
+    networks:
+      - app-network  # Conecta-se à rede app-network
+
+  # Serviço 3: Microsserviço 1
+  ms-event-manager:
+    build:
+      context: ./ms-event-manager
+      dockerfile: Dockerfile
+    image: ms-event-manager:latest
+    container_name: ms-event-manager
+    restart: always
+    environment:
+      - MONGO_DB_URI=mongodb://db_event:27017/db_event  # Conectando ao db_event
+    depends_on:
+      - db_event
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network  # Conecta-se à rede app-network
+
+  # Serviço 4: Microsserviço 2
+  ms-ticket-manager:
+    build:
+      context: ./ms-ticket-manager
+      dockerfile: Dockerfile
+    image: ms-ticket-manager:latest
+    container_name: ms-ticket-manager
+    restart: always
+    environment:
+      - MONGO_DB_URI=mongodb://db_ticket:27017/db_ticket  # Conectando ao db_ticket
+    depends_on:
+      - db_ticket
+      - rabbitmq 
+    ports:
+      - "8081:8081"
+    networks:
+      - app-network  # Conecta-se à rede app-network
+
+  # Serviço 5: Rabbitmq
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "15672:15672"  # Interface de gerenciamento RabbitMQ
+      - "5672:5672"    # Porta padrão do RabbitMQ
+    networks:
+      - app-network  # Conecta-se à rede app-network
+
+    
+
+volumes:
+  db_event-data:
+  db_ticket-data:  
+
+networks:
+  app-network:  # Definição da rede app-network
+    driver: bridge  # Usando a rede bridge padrão
