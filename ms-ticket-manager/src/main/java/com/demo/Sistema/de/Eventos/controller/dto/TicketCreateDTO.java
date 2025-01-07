@@ -10,8 +10,6 @@ import java.util.List;
 
 public class TicketCreateDTO {
 
-    @Id
-    private String ticketId;
     @NotBlank
     private String customerName;
     @NotBlank
@@ -20,17 +18,9 @@ public class TicketCreateDTO {
     private String eventId;
     @NotBlank
     private String customerMail;
-    private Event event;
     private Double BRLamount;
     private Double USDamount;
 
-    public String getTicketId() {
-        return ticketId;
-    }
-
-    public void setTicketId(String ticketId) {
-        this.ticketId = ticketId;
-    }
 
     public String getCustomerName() {
         return customerName;
@@ -48,13 +38,6 @@ public class TicketCreateDTO {
         this.cpf = cpf;
     }
 
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
 
     public @NotBlank String getEventId() {
         return eventId;
