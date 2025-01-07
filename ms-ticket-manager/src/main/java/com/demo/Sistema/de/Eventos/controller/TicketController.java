@@ -92,6 +92,7 @@ public class TicketController {
         Ticket ticketToUpdate = new Ticket();
         BeanUtils.copyProperties(ticketToUpdate, ticketCreateDto);
         ticketToUpdate.setTicketId(id);
+        System.out.println(ticketToUpdate.getTicketId());
         Ticket updatedTicket = ticketService.updateTicket(ticketToUpdate);
         TicketResponseDTO ticketResponseDTO = new TicketResponseDTO();
         BeanUtils.copyProperties(ticketResponseDTO, updatedTicket);

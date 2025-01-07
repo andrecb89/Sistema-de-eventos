@@ -24,7 +24,6 @@ public class MockTicket {
 
     public TicketCreateDTO mockTicketDTO() {
         TicketCreateDTO ticket = new TicketCreateDTO();
-        ticket.setTicketId("6772975c6eaae32cbfdc7c66");
         ticket.setCustomerName("João");
         ticket.setCpf("01234567890");
         ticket.setEventId("676aa088899e6c4a7b713a4a");

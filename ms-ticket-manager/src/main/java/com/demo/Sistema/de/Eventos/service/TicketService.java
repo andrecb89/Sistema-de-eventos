@@ -84,7 +84,7 @@ public class TicketService {
         existingTicket.setCustomerName(ticket.getCustomerName());
         existingTicket.setCpf(ticket.getCpf());
         existingTicket.setCustomerMail(ticket.getCustomerMail());
-        existingTicket.setEvent(ticket.getEvent());
+        existingTicket.setEvent(existingTicket.getEvent());
         existingTicket.setStatus(ticket.getStatus());
         existingTicket.setCpf(ticket.getCpf());
         existingTicket.setBRLamount(ticket.getBRLamount());

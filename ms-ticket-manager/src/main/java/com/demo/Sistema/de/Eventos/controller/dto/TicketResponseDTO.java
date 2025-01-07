@@ -1,8 +1,6 @@
 package com.demo.Sistema.de.Eventos.controller.dto;
 
 import com.demo.Sistema.de.Eventos.entities.Event;
-import jakarta.validation.constraints.NotBlank;
-
 
 public class TicketResponseDTO {
 
@@ -14,7 +12,7 @@ public class TicketResponseDTO {
     private Event event;
     private Double BRLamount;
     private Double USDamount;
-    private String status;
+//    private String status;
 
     public String getTicketId() {
         return ticketId;
@@ -72,11 +70,11 @@ public class TicketResponseDTO {
         this.USDamount = USDamount;
     }
 
-    public String getStatus() {
-        return "concluído";
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+//    public String getStatus() {
+//        return "concluído";
+//    }
+//
+//    public void setStatus(String status) {
+//        this.status = status;
+//    }
 }
